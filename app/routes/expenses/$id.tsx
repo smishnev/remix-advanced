@@ -1,3 +1,10 @@
+import ExpenseForm from '~/components/expenses/ExpenseForm';
+import Modal from '~/components/util/Modal';
+
 export default function UpdateExpensesPage() {
-	return <h1>Update Expenses Page</h1>;
-  }
+  return (
+    <Modal>
+      <ExpenseForm />
+    </Modal>
+  );
+}
