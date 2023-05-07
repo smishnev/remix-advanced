@@ -1,6 +1,6 @@
 type PricingPlanProps = {
 	title: string;
-	price: number;
+	price: string;
 	perks: string[];
 	icon: any;
 }

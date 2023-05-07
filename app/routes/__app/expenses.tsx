@@ -1,7 +1,6 @@
 // /expenses => shared layout
 import { Outlet } from '@remix-run/react';
 import ExpensesList from '~/components/expenses/ExpensesList';
-import expensesStyles from '~/styles/expenses.css';
 
 const DUMMY_EXPENSES = [
   {
@@ -17,10 +16,6 @@ const DUMMY_EXPENSES = [
     date: new Date().toISOString(),
   },
 ];
-
-export function links() {
-  return [{ rel: 'stylesheet', href: expensesStyles }];
-}
 
 export default function ExpensesLayout() {
   return (
