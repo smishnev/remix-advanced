@@ -2,14 +2,22 @@ import {
   Form,
   Link,
   useActionData,
-  useLoaderData,
+  // useLoaderData,
+  useMatches,
+  useParams,
   useNavigation,
 } from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
-  const expenseData = useLoaderData();
+  // const expenseData = useLoaderData();
+  const params = useParams();
+  const matches = useMatches();
+  const expenses = matches.find(
+    (match) => match.id === 'routes/__app/expenses'
+  )?.data;
+  const expenseData = expenses.find((expense: any) => expense.id === params.id);
   const navigation = useNavigation();
 
   const defaultValues = expenseData
@@ -86,7 +94,7 @@ function ExpenseForm() {
       </div>
       {validationErrors && (
         <ul>
-          {Object.values(validationErrors).map((error: any) => (
+          {Object.values(validationErrors).map((error:any) => (
             <li key={error}>{error}</li>
           ))}
         </ul>
