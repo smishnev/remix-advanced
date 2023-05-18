@@ -51,3 +51,13 @@ export async function action({params, request}: {params:any, request:any }) {
     return { deletedId: expenseId };
   }
 }
+
+export function meta({ params, parentsData }: {params: any, parentsData:any}) {
+  const expense = parentsData['routes/__app/expenses'].find(
+    (expense:any) => expense.id === params.id
+  );
+  return {
+    title: expense.title,
+    description: 'Update expense.',
+  };
+}

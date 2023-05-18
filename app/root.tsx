@@ -22,7 +22,7 @@ function Document({ title, children }: {title?: string, children: any}) {
   return (
     <html lang="en">
       <head>
-        <title>{title}</title>
+        {title && <title>{title}</title>}
         <Meta />
         <Links />
       </head>
