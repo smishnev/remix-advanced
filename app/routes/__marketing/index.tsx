@@ -55,3 +55,5 @@ export function headers({parentHeaders}: any) {
     'Cache-Control': parentHeaders.get('Cache-Control') // 60 minutes
   }
 }
+
+export const handle = { disableJS: true };
