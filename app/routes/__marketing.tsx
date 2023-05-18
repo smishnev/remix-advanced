@@ -20,3 +20,9 @@ export function loader({ request }: any) {
 export function links() {
   return [{ rel: 'stylesheet', href: marketingStyles }];
 }
+
+export function headers() {
+  return {
+    'Cache-Control': 'max-age=3600' // 60 minutes
+  }
+}
