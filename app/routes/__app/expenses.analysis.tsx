@@ -1,10 +1,10 @@
 // /expenses/analysis
-import { json } from '@remix-run/node';
-import { Link, useCatch, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 
 import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
 import Chart from '~/components/expenses/Chart';
 import { getExpenses } from '~/data/expenses.server';
+import { requireUserSession } from '~/data/auth.server';
 export default function ExpensesAnalysisPage() {
 	const expenses = useLoaderData();
 	const hasExpenses = expenses && expenses.length > 0;
@@ -29,7 +29,8 @@ export default function ExpensesAnalysisPage() {
 	);
   }
 
-  export async function loader() {
+  export async function loader({request}: any) {
+	await requireUserSession(request);
 	const expenses = await getExpenses();
 
   	return expenses;
