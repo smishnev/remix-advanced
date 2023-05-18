@@ -1,46 +1,40 @@
-import {
-  Form,
-  Link,
-  useSearchParams,
-  useNavigation,
-} from '@remix-run/react';
-import { FaLock, FaUserPlus } from 'react-icons/fa';
+import { redirect } from '@remix-run/node';
 
-function AuthForm() {
-  const [searchParams] = useSearchParams();
-  const navigation = useNavigation();
+import AuthForm from '~/components/auth/AuthForm';
+import { login, signup } from '~/data/auth.server';
+import { validateCredentials } from '~/data/validation.server';
+import authStyles from '~/styles/auth.css';
 
-  const authMode = searchParams.get('mode') || 'login';
-
-  const submitBtnCaption = authMode === 'login' ? 'Login' : 'Create User';
-  const toggleBtnCaption =
-    authMode === 'login' ? 'Create a new user' : 'Log in with existing user';
-
-  const isSubmitting = navigation.state !== 'idle';
-
-  return (
-    <Form method="post" className="form" id="auth-form">
-      <div className="icon-img">
-        {authMode === 'login' ? <FaLock /> : <FaUserPlus />}
-      </div>
-      <p>
-        <label htmlFor="email">Email Address</label>
-        <input type="email" id="email" name="email" required />
-      </p>
-      <p>
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" minLength={7} />
-      </p>
-      <div className="form-actions">
-        <button disabled={isSubmitting}>
-          {isSubmitting ? 'Authenticating...' : submitBtnCaption}
-        </button>
-        <Link to={authMode === 'login' ? '?mode=signup' : '?mode=login'}>
-          {toggleBtnCaption}
-        </Link>
-      </div>
-    </Form>
-  );
+export default function AuthPage() {
+  return <AuthForm />;
 }
 
-export default AuthForm;
+export async function action({ request }:any) {
+  const searchParams = new URL(request.url).searchParams;
+  const authMode = searchParams.get('mode') || 'login';
+
+  const formData = await request.formData();
+  const credentials = Object.fromEntries(formData);
+
+  try {
+    validateCredentials(credentials);
+  } catch (error) {
+    return error;
+  }
+
+  try {
+    if (authMode === 'login') {
+      return await login(credentials as any);
+    } else {
+      return await signup(credentials as any);
+    }
+  } catch (error:any) {
+    if (error.status === 422) {
+      return { credentials: error.message };
+    }
+  }
+}
+
+export function links() {
+  return [{ rel: 'stylesheet', href: authStyles }];
+}
