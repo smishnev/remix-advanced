@@ -39,5 +39,6 @@ export default function ExpensesLayout() {
 
 export async function loader() {
   const expenses = await getExpenses();
-return expenses;
+  
+  return expenses;
 }
